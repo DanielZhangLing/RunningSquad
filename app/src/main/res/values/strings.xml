@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Running Squad</string>
+    <string name="title_activity_group_info">GroupInfoActivity</string>
+</resources>
