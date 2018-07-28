@@ -1,5 +1,15 @@
 <resources>
     <string name="app_name">Running Squad</string>
     <string name="title_activity_group_info">GroupInfoActivity</string>
-
+    <string name="login_text">Login</string>
+    <string name="register_text">Register</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="material_icon_account">&#xe800;</string>
+    <string name="material_icon_password">&#xe9fa;</string>
+    <string name="material_icon_email">&#xe99c;</string>
+    <string name="material_icon_city">&#xe878;</string>
+    <string name="material_icon_flag">&#xe96a;</string>
+    <string name="email_hint">Email</string>
+    <string name="city_hint">City</string>
 </resources>
