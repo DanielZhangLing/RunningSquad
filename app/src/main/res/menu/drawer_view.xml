@@ -18,5 +18,9 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/baseline_settings_black_18"
             android:title="Settings" />
+        <item
+            android:id="@+id/nav_acknowlegement"
+            android:icon="@drawable/baseline_settings_black_18"
+            android:title="Acknowledgement" />
     </group>
 </menu>

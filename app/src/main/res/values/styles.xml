@@ -14,5 +14,8 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+    <style name="TableStyle">
+        <item name="android:fontFamily">monospace</item>
+    </style>
 
 </resources>
