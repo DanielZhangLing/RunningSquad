@@ -1,6 +1,8 @@
 package neu.edu.runningsquad;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -94,8 +96,11 @@ public class LoginActivity extends android.accounts.AccountAuthenticatorActivity
     }
 
     public void jump2Person(String username) {
+        SharedPreferences userInfo = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = userInfo.edit();
+        editor.putString("username", username);
+        editor.commit();
         Intent intent = new Intent(this, PersonalActivity.class);
-        intent.putExtra("username", username);
         startActivity(intent);
         this.finish();
     }
