@@ -17,10 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".PersonalActivity" />
-        <activity
-            android:name=".GroupInfoActivity"
-            android:label="@string/title_activity_group_info"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".GroupInfoActivity"/>
         <activity android:name=".ScoreBoardActivity" />
         <activity android:name=".RunningActivity" />
         <activity android:name=".SettingActivity" />

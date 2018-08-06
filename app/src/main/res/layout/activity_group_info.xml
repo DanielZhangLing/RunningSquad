@@ -33,7 +33,7 @@
             android:src="@mipmap/ic_launcher" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/squad_name"
+            android:id="@+id/squad_info_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/margin_tweak"
@@ -42,7 +42,7 @@
             app:fontFamily="@font/bungee_inline" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/squad_city"
+            android:id="@+id/squad_info_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_tweak"
@@ -50,7 +50,7 @@
             android:textSize="16sp" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/squad_desc"
+            android:id="@+id/squad_info_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_tweak"
@@ -59,7 +59,7 @@
             android:textSize="12sp" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/squad_prize"
+            android:id="@+id/squad_info_prize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_tweak"
@@ -93,13 +93,13 @@
                     style="@style/TableStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Score" />
+                    android:text="Star" />
 
                 <TextView
                     style="@style/TableStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Title" />
+                    android:text="Row" />
 
                 <TextView
                     style="@style/TableStyle"

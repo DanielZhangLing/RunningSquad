@@ -49,6 +49,7 @@ public class LoginActivity extends MainActivity {
                         if (AES.decrypt(user.getPassword(), KEY).equals(password)) {
                             Toast.makeText(getApplicationContext(), R.string.login_success, Toast.LENGTH_LONG).show();
                             store2SharedPreference("userInfo", "username", username);
+                            store2SharedPreference("userInfo", "squadname", user.getSquad());
                             if (user.getSquad() != null && !user.getSquad().equals(""))
                                 jump2Person();
                             else

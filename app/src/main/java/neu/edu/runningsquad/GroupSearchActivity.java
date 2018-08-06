@@ -30,7 +30,7 @@ public class GroupSearchActivity extends MainActivity {
         initGroupSearch();
     }
 
-    public void initGroupSearch(){
+    public void initGroupSearch() {
         mReference = FirebaseDatabase.getInstance().getReference();
         SharedPreferences userInfo = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         username = userInfo.getString("username", "");
@@ -41,7 +41,7 @@ public class GroupSearchActivity extends MainActivity {
         final String squadname = ((TextView) findViewById(R.id.create_squad_name)).getText().toString();
         String desc = ((TextView) findViewById(R.id.create_squad_desc)).getText().toString();
         String city = ((TextView) findViewById(R.id.create_squad_city)).getText().toString();
-        final Squad newSquad = new Squad(squadname, desc, city);
+        final Squad newSquad = new Squad(squadname, desc, city, username);
         try {
             mReference.child("squads").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -69,16 +69,19 @@ public class GroupSearchActivity extends MainActivity {
         }
     }
 
-    public void updateUser(String squadname){
+    public void updateUser(String squadname) {
         mReference.child("users").child(username).child("squad").setValue(squadname);
+        mReference.child("users").child(username).child("role").setValue("owner");
+        mReference.child("squads").child(squadname).child("members").child(username).setValue(true);
+        mReference.child("squads").child(squadname).child("owner").setValue(username);
     }
 
-    public void jump2CreateSquad(View view){
+    public void jump2CreateSquad(View view) {
         findViewById(R.id.group_create_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.group_search_layout).setVisibility(View.GONE);
     }
 
-    public void jump2SearchSquad(){
+    public void jump2SearchSquad() {
         findViewById(R.id.group_search_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.group_create_layout).setVisibility(View.GONE);
     }

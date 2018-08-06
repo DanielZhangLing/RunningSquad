@@ -39,7 +39,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
 
-
+                    case R.id.nav_squad:
+                        Intent loadSquad = new Intent(getApplicationContext(), GroupInfoActivity.class);
+                        startActivity(loadSquad);
+                        mDrawerLayout.closeDrawers();
+                        break;
                     case R.id.nav_profile:
                         Intent loadProfile = new Intent(getApplicationContext(), PersonalActivity.class);
                         startActivity(loadProfile);
@@ -73,6 +77,5 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(name, value);
         editor.commit();
     }
-
 
 }

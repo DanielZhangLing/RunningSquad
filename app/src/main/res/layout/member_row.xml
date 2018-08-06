@@ -1,0 +1,30 @@
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/member_row_layout"
+    android:layout_width="0dp"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/member_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="casual" />
+
+    <TextView
+        android:id="@+id/member_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="casual" />
+
+    <TextView
+        android:id="@+id/member_role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="casual" />
+
+    <ImageButton
+        android:id="@+id/member_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_arrow_forward_black_18" />
+</TableRow>
