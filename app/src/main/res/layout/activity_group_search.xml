@@ -35,11 +35,12 @@
                 android:hint="Squad Name" />
 
             <android.support.design.button.MaterialButton
-                android:id="@+id/register"
+                android:id="@+id/create_squad_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
                 android:minWidth="96dp"
+                android:onClick="jump2CreateSquad"
                 android:text="@string/create_group" />
 
 
@@ -53,7 +54,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/create_group_layout"
+        android:id="@+id/group_create_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -67,7 +68,8 @@
         android:paddingBottom="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="16dp">
+        android:paddingTop="16dp"
+        android:visibility="gone">
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
@@ -94,6 +96,7 @@
                 tools:ignore="DuplicateIds" />
 
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/create_squad_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -116,6 +119,7 @@
                 tools:ignore="DuplicateIds" />
 
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/create_squad_desc"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
                 android:layout_marginLeft="16dp"
@@ -139,6 +143,7 @@
                 tools:ignore="DuplicateIds" />
 
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/create_squad_city"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -159,6 +164,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
                 android:minWidth="96dp"
+                android:onClick="createSquad"
                 android:text="@string/create_group" />
         </LinearLayout>
     </LinearLayout>

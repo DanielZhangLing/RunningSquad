@@ -36,7 +36,7 @@
             android:id="@+id/squad_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@string/margin_tweak"
+            android:layout_marginVertical="@dimen/margin_tweak"
             android:text="squad_name_demo"
             android:textSize="24sp"
             app:fontFamily="@font/bungee_inline" />
@@ -45,7 +45,7 @@
             android:id="@+id/squad_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@string/margin_tweak"
+            android:layout_marginBottom="@dimen/margin_tweak"
             android:text="city_demo"
             android:textSize="16sp" />
 
@@ -53,8 +53,8 @@
             android:id="@+id/squad_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@string/margin_tweak"
-            android:paddingHorizontal="@string/margin_tweak"
+            android:layout_marginBottom="@dimen/margin_tweak"
+            android:paddingHorizontal="@dimen/margin_tweak"
             android:text="This is the greatest squad from Boston. Any running lover is welcomed to join us!"
             android:textSize="12sp" />
 
@@ -62,15 +62,15 @@
             android:id="@+id/squad_prize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@string/margin_tweak"
-            android:paddingHorizontal="@string/margin_tweak"
+            android:layout_marginBottom="@dimen/margin_tweak"
+            android:paddingHorizontal="@dimen/margin_tweak"
             android:text="First Prize in July 2018\nSecond Prize in June 2018"
             android:textSize="12sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="@string/margin_tweak"
+            android:layout_marginBottom="@dimen/margin_tweak"
             android:background="@android:color/black" />
 
         <TableLayout

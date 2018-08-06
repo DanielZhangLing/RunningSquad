@@ -1,8 +1,6 @@
 package neu.edu.runningsquad;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -20,7 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import neu.edu.runningsquad.model.User;
 import neu.edu.runningsquad.util.AES;
 
-public class LoginActivity extends android.accounts.AccountAuthenticatorActivity {
+public class LoginActivity extends MainActivity {
 
     private DatabaseReference mReference;
     private final String KEY = "runningsquad";
@@ -50,7 +48,11 @@ public class LoginActivity extends android.accounts.AccountAuthenticatorActivity
                     if (child.getKey().equals(username)) {
                         if (AES.decrypt(user.getPassword(), KEY).equals(password)) {
                             Toast.makeText(getApplicationContext(), R.string.login_success, Toast.LENGTH_LONG).show();
-                            jump2Person(username);
+                            store2SharedPreference("userInfo", "username", username);
+                            if (user.getSquad() != null && !user.getSquad().equals(""))
+                                jump2Person();
+                            else
+                                jump2GroupSearch();
                             return;
                         }
                     }
@@ -82,7 +84,8 @@ public class LoginActivity extends android.accounts.AccountAuthenticatorActivity
                         }
                     }
                     mReference.child("users").child(username).setValue(newUser);
-                    jump2Person(username);
+                    store2SharedPreference("userInfo", "username", username);
+                    jump2GroupSearch();
                 }
 
                 @Override
@@ -95,12 +98,14 @@ public class LoginActivity extends android.accounts.AccountAuthenticatorActivity
         }
     }
 
-    public void jump2Person(String username) {
-        SharedPreferences userInfo = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = userInfo.edit();
-        editor.putString("username", username);
-        editor.commit();
+    public void jump2Person() {
         Intent intent = new Intent(this, PersonalActivity.class);
+        startActivity(intent);
+        this.finish();
+    }
+
+    public void jump2GroupSearch() {
+        Intent intent = new Intent(this, GroupSearchActivity.class);
         startActivity(intent);
         this.finish();
     }

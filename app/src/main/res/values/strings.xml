@@ -17,9 +17,10 @@
     <string name="find_group">Find Group</string>
     <string name="squdname_hint">Squad name</string>
     <string name="description_hint">Description</string>
-    <string name="margin_tweak">8dp</string>
     <string name="login_success">Login successfully!</string>
     <string name="login_fail">Login failed. Please recheck your username and password!</string>
     <string name="register_warning">The username is already in use!</string>
+    <string name="squad_warning">The squad name is already in use!</string>
+    <string name="squad_success">\"Squad created!\"</string>
 
 </resources>

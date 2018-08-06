@@ -1,6 +1,8 @@
 package neu.edu.runningsquad;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -63,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void store2SharedPreference(String file, String name, String value) {
+        SharedPreferences userInfo = getSharedPreferences(file, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = userInfo.edit();
+        editor.putString(name, value);
+        editor.commit();
     }
 
 

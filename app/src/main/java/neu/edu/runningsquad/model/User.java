@@ -8,6 +8,7 @@ public class User {
     private String password;
     private String email;
     private String city;
+    private String squad;
 
     public User() {
     }
@@ -49,6 +50,14 @@ public class User {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getSquad() {
+        return squad;
+    }
+
+    public void setSquad(String squad) {
+        this.squad = squad;
     }
 
 //    public Map<String, Object> toMap() {

@@ -1,9 +1,8 @@
 package neu.edu.runningsquad;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
-public class GroupInfoActivity extends AppCompatActivity {
+public class GroupInfoActivity extends MainActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
