@@ -10,13 +10,14 @@ public class Sessions {
 
     static String appName = "neu.edu.runningsquad";
 
-    static public void saveLoginInfo(String username, String password, Context context){
+    static public void saveLoginInfo(String username, String password, String squadname, Context context){
 
         SharedPreferences preferences =
                 context.getSharedPreferences(appName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("username", username);
         editor.putString("password", password);
+        editor.putString("squadname", squadname);
         editor.commit();
     }
 
@@ -31,5 +32,11 @@ public class Sessions {
         SharedPreferences preferences =
                 context.getSharedPreferences(appName, Context.MODE_PRIVATE);
         return preferences.getString("password", null);
+    }
+
+    static public String getSquadName(Context context){
+        SharedPreferences preferences =
+                context.getSharedPreferences(appName, Context.MODE_PRIVATE);
+        return preferences.getString("squadname", null);
     }
 }

@@ -1,8 +1,6 @@
 package neu.edu.runningsquad;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -19,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import neu.edu.runningsquad.model.User;
 import neu.edu.runningsquad.util.AES;
+import neu.edu.runningsquad.util.Sessions;
 
 public class LoginActivity extends MainActivity {
 
@@ -39,7 +38,6 @@ public class LoginActivity extends MainActivity {
 
     }
 
-
     public void login(View view) {
         final String username = ((TextView) findViewById(R.id.username_input)).getText().toString();
         final String password = ((TextView) findViewById(R.id.password_input)).getText().toString();
@@ -51,6 +49,8 @@ public class LoginActivity extends MainActivity {
                     if (child.getKey().equals(username)) {
                         if (AES.decrypt(user.getPassword(), KEY).equals(password)) {
                             Toast.makeText(getApplicationContext(), R.string.login_success, Toast.LENGTH_LONG).show();
+
+                            Sessions.saveLoginInfo(user.getUsername(), user.getPassword(), user.getSquad(), getApplicationContext());
                             store2SharedPreference("userInfo", "username", username);
                             store2SharedPreference("userInfo", "squadname", user.getSquad());
                             if (user.getSquad() != null && !user.getSquad().equals(""))
