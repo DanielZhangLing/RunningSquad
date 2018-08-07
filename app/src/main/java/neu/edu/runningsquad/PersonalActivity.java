@@ -10,6 +10,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import neu.edu.runningsquad.model.Squad;
+import neu.edu.runningsquad.model.User;
 import neu.edu.runningsquad.util.Sessions;
 
 public class PersonalActivity extends MainActivity {
@@ -26,14 +28,18 @@ public class PersonalActivity extends MainActivity {
         mReference.child("users/" + username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                User user = dataSnapshot.getValue(User.class);
+                showUserInfo(user);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+    }
+
+    private void showUserInfo(User user){
+
     }
 
 }
