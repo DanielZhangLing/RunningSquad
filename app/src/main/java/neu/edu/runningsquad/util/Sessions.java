@@ -2,6 +2,7 @@ package neu.edu.runningsquad.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 import java.util.Collections;
 import java.util.Map;
@@ -18,7 +19,17 @@ public class Sessions {
         editor.putString("username", username);
         editor.putString("password", password);
         editor.putString("squadname", squadname);
-        editor.commit();
+        editor.apply();
+    }
+
+    static public void saveLoginInfo(String username, String squadname, Context context){
+
+        SharedPreferences preferences =
+                context.getSharedPreferences(appName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("username", username);
+        editor.putString("squadname", squadname);
+        editor.apply();
     }
 
     static public String getUsername(Context context){
