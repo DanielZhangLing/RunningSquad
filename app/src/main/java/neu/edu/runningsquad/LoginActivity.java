@@ -1,6 +1,8 @@
 package neu.edu.runningsquad;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -36,6 +38,7 @@ public class LoginActivity extends MainActivity {
         ((EditText) findViewById(R.id.register_password)).setTransformationMethod(PasswordTransformationMethod.getInstance());
 
     }
+
 
     public void login(View view) {
         final String username = ((TextView) findViewById(R.id.username_input)).getText().toString();
