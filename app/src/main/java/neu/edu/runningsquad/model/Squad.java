@@ -11,6 +11,7 @@ public class Squad {
     private Map<String, Boolean> members;
     private Map<String, Boolean> prizes;
     private String owner;
+    private int number;
 
     public Squad() {
     }
@@ -22,6 +23,7 @@ public class Squad {
         this.owner = owner;
         members = new HashMap<>();
         prizes = new HashMap<>();
+        number = 1;
     }
 
     public String getName() {
@@ -81,5 +83,13 @@ public class Squad {
             return res.substring(0, res.length() - 2);
         }
         return "";
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }

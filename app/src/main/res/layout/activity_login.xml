@@ -34,7 +34,7 @@
             android:id="@+id/logo_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/running_squad_logo" />
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/username_input"

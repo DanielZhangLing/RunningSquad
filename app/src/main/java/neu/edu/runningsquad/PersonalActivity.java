@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import neu.edu.runningsquad.model.Squad;
@@ -24,7 +25,7 @@ public class PersonalActivity extends MainActivity {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_personal, contentFrameLayout);
         username = Sessions.getUsername(this.getApplicationContext());
-
+        mReference = FirebaseDatabase.getInstance().getReference();
         mReference.child("users/" + username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
