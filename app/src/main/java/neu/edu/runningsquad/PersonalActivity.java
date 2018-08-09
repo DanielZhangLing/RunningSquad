@@ -47,6 +47,7 @@ public class PersonalActivity extends MainActivity {
                 User user = dataSnapshot.getValue(User.class);
                 showUserInfo(user);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -54,10 +55,10 @@ public class PersonalActivity extends MainActivity {
         });
     }
 
-    private void showUserInfo(User user){
+    private void showUserInfo(User user) {
 
         emailTextView.setText(user.getEmail());
-        usernameTextView.setText(user.getEmail());
+        usernameTextView.setText(user.getUsername());
         starTextView.setText(Integer.toString(user.getStar()));
 
         String squad = user.getSquad();
@@ -85,11 +86,11 @@ public class PersonalActivity extends MainActivity {
         }
     }
 
-    public void showSquadInfo(Squad squad){
+    public void showSquadInfo(Squad squad) {
 
         groupNameTextView.setText(squad.getName());
         groupRankingTextView.setText("0");
-        groupStarsTextView.setText(String.valueOf(squad.getPrizes()));
+        groupStarsTextView.setText(String.valueOf(squad.getTotalStars()));
     }
 
 }
