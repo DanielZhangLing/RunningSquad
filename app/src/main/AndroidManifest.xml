@@ -43,11 +43,19 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyB68G2npSnpMmxaqs9_fudZe5oYWDSDm8k" />
 
         <activity
             android:name=".RunningActivity"
             android:label="@string/title_activity_running"></activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
 </manifest>
