@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,12 +18,18 @@ import com.google.firebase.database.ValueEventListener;
 import neu.edu.runningsquad.model.Squad;
 import neu.edu.runningsquad.model.User;
 
+import static neu.edu.runningsquad.util.Sessions.clearTemp;
+import static neu.edu.runningsquad.util.Sessions.getSquadName;
+import static neu.edu.runningsquad.util.Sessions.getTempSquad;
+import static neu.edu.runningsquad.util.Sessions.getUsername;
+
 public class GroupInfoActivity extends MainActivity {
 
     private String squadname;
     private String username;
     private DatabaseReference mReference;
     private ViewGroup tableView;
+    private int number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +41,42 @@ public class GroupInfoActivity extends MainActivity {
 
     public void initGroupInfo() {
         mReference = FirebaseDatabase.getInstance().getReference();
-        SharedPreferences userInfo = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        SharedPreferences tempInfo = getSharedPreferences("tempInfo", Context.MODE_PRIVATE);
-        username = userInfo.getString("username", "");
-        squadname = tempInfo.getString("squadname", userInfo.getString("squadname", ""));
-        tempInfo.edit().clear();
+        username = getUsername(this);
+        String mySquadname = getSquadName(this);
+        String tempSquadname = getTempSquad(this);
+        if (tempSquadname != null && !tempSquadname.equals("")) {
+            squadname = tempSquadname;
+            clearTemp(this);
+        } else
+            squadname = mySquadname;
+        if (mySquadname == null || mySquadname.equals("")) {
+            showJoinButton();
+        }
         tableView = findViewById(R.id.table_member);
         initGroupData();
         initMemberData();
+    }
+
+    private void showJoinButton() {
+        findViewById(R.id.join_squad).setVisibility(View.VISIBLE);
+    }
+
+    public void joinSquad(View view) {
+        if (number < 10) {
+            try {
+                mReference.child("users").child(username).child("squad").setValue(squadname);
+                mReference.child("users").child(username).child("role").setValue("member");
+                mReference.child("squads").child(squadname).child("members").child(username).setValue(true);
+                mReference.child("squads").child(squadname).child("number").setValue(number + 1);
+                Toast.makeText(getApplicationContext(), R.string.join_squad_success, Toast.LENGTH_LONG).show();
+                initMemberData();
+            } catch (Exception e) {
+                System.err.println("Joining squad failed: " + e.getMessage());
+            }
+
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.join_squad_warning, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void initMemberData() {
@@ -51,7 +86,7 @@ public class GroupInfoActivity extends MainActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         User user = child.getValue(User.class);
-                        if (user.getSquad().equals(squadname)) {
+                        if (user.getSquad() != null && user.getSquad().equals(squadname)) {
                             View row = getLayoutInflater().inflate(R.layout.member_row, tableView, false);
                             showMemberInfo(row, user);
                             tableView.addView(row, 2);
@@ -75,6 +110,7 @@ public class GroupInfoActivity extends MainActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Squad squad = dataSnapshot.getValue(Squad.class);
+                    number = squad.getNumber();
                     showSquadInfo(squad);
                 }
 

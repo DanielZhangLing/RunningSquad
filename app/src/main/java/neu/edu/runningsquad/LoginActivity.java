@@ -19,6 +19,8 @@ import neu.edu.runningsquad.model.User;
 import neu.edu.runningsquad.util.AES;
 import neu.edu.runningsquad.util.Sessions;
 
+import static neu.edu.runningsquad.util.Sessions.saveLoginInfo;
+
 public class LoginActivity extends MainActivity {
 
     private DatabaseReference mReference;
@@ -49,10 +51,7 @@ public class LoginActivity extends MainActivity {
                     if (child.getKey().equals(username)) {
                         if (AES.decrypt(user.getPassword(), KEY).equals(password)) {
                             Toast.makeText(getApplicationContext(), R.string.login_success, Toast.LENGTH_LONG).show();
-
-                            Sessions.saveLoginInfo(user.getUsername(), user.getPassword(), user.getSquad(), getApplicationContext());
-                            store2SharedPreference("userInfo", "username", username);
-                            store2SharedPreference("userInfo", "squadname", user.getSquad());
+                            saveLoginInfo(user.getUsername(), user.getPassword(), user.getSquad(), getApplicationContext());
                             if (user.getSquad() != null && !user.getSquad().equals(""))
                                 jump2Person();
                             else
@@ -73,7 +72,7 @@ public class LoginActivity extends MainActivity {
     public void register(View view) {
 
         final String username = ((TextView) findViewById(R.id.register_username)).getText().toString();
-        String password = AES.encrypt(((TextView) findViewById(R.id.register_password)).getText().toString(), KEY);
+        final String password = AES.encrypt(((TextView) findViewById(R.id.register_password)).getText().toString(), KEY);
         String email = ((TextView) findViewById(R.id.register_email)).getText().toString();
         String city = ((TextView) findViewById(R.id.register_city)).getText().toString();
         final User newUser = new User(username, password, email, city);
@@ -88,7 +87,7 @@ public class LoginActivity extends MainActivity {
                         }
                     }
                     mReference.child("users").child(username).setValue(newUser);
-                    store2SharedPreference("userInfo", "username", username);
+                    saveLoginInfo(username, password, "", getApplicationContext());
                     jump2GroupSearch();
                 }
 

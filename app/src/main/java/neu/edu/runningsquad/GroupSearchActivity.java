@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,12 +18,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import neu.edu.runningsquad.model.Squad;
+import neu.edu.runningsquad.util.SquadAdapter;
 
 public class GroupSearchActivity extends MainActivity {
 
     private String username;
     private DatabaseReference mReference;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +43,10 @@ public class GroupSearchActivity extends MainActivity {
         mReference = FirebaseDatabase.getInstance().getReference();
         SharedPreferences userInfo = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         username = userInfo.getString("username", "");
+        mRecyclerView = findViewById(R.id.squad_list);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        initGroupData();
     }
 
     public void createSquad(View view) {
@@ -98,6 +111,30 @@ public class GroupSearchActivity extends MainActivity {
             jump2SearchSquad();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    public void initGroupData(){
+        try {
+            mReference.child("squads").addListenerForSingleValueEvent(new ValueEventListener() {
+                List<Squad> squads = new ArrayList<>();
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        Squad squad = child.getValue(Squad.class);
+                        squads.add(squad);
+                    }
+                    mAdapter = new SquadAdapter(squads);
+                    mRecyclerView.setAdapter(mAdapter);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
+        } catch (Exception e) {
+            System.err.println("Fetching squadData failed: " + e.getMessage());
         }
     }
 }

@@ -22,5 +22,8 @@
     <string name="register_warning">The username is already in use!</string>
     <string name="squad_warning">The squad name is already in use!</string>
     <string name="squad_success">\"Squad created!\"</string>
+    <string name="join_squad">JOIN SQUAD</string>
+    <string name="join_squad_warning">Maximum number of members has been reached!</string>
+    <string name="join_squad_success">Welcome to our family!</string>
 
 </resources>

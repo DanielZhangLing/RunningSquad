@@ -99,7 +99,7 @@
                     style="@style/TableStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Row" />
+                    android:text="Role" />
 
                 <TextView
                     style="@style/TableStyle"
@@ -114,5 +114,14 @@
                 android:background="@android:color/black" />
 
         </TableLayout>
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/join_squad"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:onClick="joinSquad"
+            android:text="@string/join_squad"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>
