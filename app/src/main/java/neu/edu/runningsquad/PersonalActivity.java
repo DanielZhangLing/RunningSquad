@@ -1,8 +1,6 @@
 package neu.edu.runningsquad;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -44,7 +42,14 @@ public class PersonalActivity extends MainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_personal, contentFrameLayout);
-        username = Sessions.getUsername(this.getApplicationContext());
+        String myUsername = Sessions.getUsername(this.getApplicationContext());
+        String tempUsername = Sessions.getTempUsername(this.getApplicationContext());
+        if (tempUsername != null && !tempUsername.equals("")) {
+            username = tempUsername;
+            Sessions.clearTemp(this.getApplicationContext());
+        } else {
+            username = myUsername;
+        }
         emailTextView = findViewById(R.id.personal_email);
         usernameTextView = findViewById(R.id.personal_username);
         starTextView = findViewById(R.id.personal_stars);
@@ -71,13 +76,14 @@ public class PersonalActivity extends MainActivity {
         mReference.child("user-records").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot recordSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot recordSnapshot : dataSnapshot.getChildren()) {
                     Record record = recordSnapshot.getValue(Record.class);
                     recordList.add(record);
 
                 }
                 recordAdapter.notifyDataSetChanged();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -99,7 +105,6 @@ public class PersonalActivity extends MainActivity {
 
     }
 
-    
 
     public void initGroupData(String squadname) {
         try {
@@ -127,7 +132,7 @@ public class PersonalActivity extends MainActivity {
         groupStarsTextView.setText(String.valueOf(squad.getTotalStars()));
     }
 
-    public void startToRun(View view){
+    public void startToRun(View view) {
         Intent intent = new Intent(this, RunningActivity.class);
         startActivity(intent);
     }
