@@ -30,8 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textColor="@color/md_blue_400"
             android:text="Group Name"
+            android:textColor="@color/md_blue_400"
             android:textSize="24dp"
             app:layout_constraintStart_toStartOf="@+id/score_group_member_num"
             app:layout_constraintTop_toTopOf="parent" />
@@ -40,7 +40,7 @@
             android:id="@+id/score_group_member_stars"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="19dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:text="123 stars"
@@ -59,6 +59,7 @@
             app:layout_constraintTop_toTopOf="@+id/score_group_member_stars" />
 
         <ImageButton
+            android:id="@+id/imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -75,13 +76,11 @@
             android:id="@+id/score_group_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginLeft="16dp"
+            android:textColor="@color/main_color_grey_700"
             android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="@+id/score_group_name"
-            app:layout_constraintStart_toEndOf="@+id/score_group_name"
-            app:layout_constraintTop_toTopOf="@+id/score_group_name" />
+            app:layout_constraintBottom_toBottomOf="@+id/score_group_member_stars"
+            app:layout_constraintStart_toEndOf="@+id/score_group_member_stars" />
 
     </android.support.constraint.ConstraintLayout>
 

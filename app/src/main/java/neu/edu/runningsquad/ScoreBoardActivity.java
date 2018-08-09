@@ -21,6 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.security.acl.Group;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import neu.edu.runningsquad.model.Record;
@@ -52,40 +54,39 @@ public class ScoreBoardActivity extends MainActivity {
         cityNameText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId,
                                           KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    Log.i("runningsquad", v.getText().toString());
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    Log.i("Runner", v.getText().toString());
                     searchForGroups(v.getText().toString());
                 }
                 return false;
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View view, int position,
-                                    long arg3) {
-                Squad squad = (Squad) arg0.getItemAtPosition(position);
-                Sessions.saveTempInfo("", squad.getName(), ScoreBoardActivity.this);
-                Intent intent = new Intent(ScoreBoardActivity.this, GroupInfoActivity.class);
-                startActivity(intent);
-            }
-
-        });
 
     }
 
 
     void searchForGroups(String city){
-        mReference.child("squads").orderByChild("city").equalTo(city).orderByChild("totalStars").addValueEventListener(new ValueEventListener() {
+        mReference.child("squads").orderByChild("city").equalTo(city).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                ArrayList<Squad> newData = new ArrayList<Squad>();
                 for (DataSnapshot recordSnapshot: dataSnapshot.getChildren()) {
+
                     Squad squad = recordSnapshot.getValue(Squad.class);
-                    squadList.add(squad);
+                    newData.add(squad);
 
                 }
+
+                Collections.sort(newData, new Comparator<Squad>() {
+                    @Override
+                    public int compare(Squad lhs, Squad rhs) {
+                        return lhs.getTotalStars() > rhs.getTotalStars() ? -1 : (lhs.getTotalStars() < rhs.getTotalStars()) ? 1 : 0;
+                    }
+                });
+                squadList.clear();
+                squadList.addAll(newData);
                 groupRankingAdapter.notifyDataSetChanged();
 
             }
