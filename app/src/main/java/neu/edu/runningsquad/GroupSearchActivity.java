@@ -8,7 +8,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,7 @@ public class GroupSearchActivity extends MainActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private EditText searchEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,24 @@ public class GroupSearchActivity extends MainActivity {
         mRecyclerView = findViewById(R.id.squad_list);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        searchEditText = findViewById(R.id.search_text);
+        searchEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case EditorInfo.IME_ACTION_SEND:
+                        case KeyEvent.KEYCODE_ENTER:
+                            searchSquad(findViewById(android.R.id.content));
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
         searchSquad(findViewById(android.R.id.content));
     }
 
@@ -92,7 +114,7 @@ public class GroupSearchActivity extends MainActivity {
     }
 
     public void searchSquad(View view) {
-        final String searchText = ((TextView) findViewById(R.id.search_text)).getText().toString();
+        final String searchText = searchEditText.getText().toString();
         try {
             mReference.child("squads").addListenerForSingleValueEvent(new ValueEventListener() {
                 List<Squad> squads = new ArrayList<>();
