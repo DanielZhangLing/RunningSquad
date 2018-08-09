@@ -41,13 +41,30 @@
             android:textSize="24sp"
             app:fontFamily="@font/bungee_inline" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/squad_info_city"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_tweak"
             android:layout_marginBottom="@dimen/margin_tweak"
-            android:text="city_demo"
-            android:textSize="16sp" />
+            android:gravity="center">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/squad_info_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:text="city_demo"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/squad_info_totalStars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:drawableRight="@drawable/baseline_star_border_black_18"
+                android:text="50"
+                android:textSize="16sp" />
+        </LinearLayout>
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/squad_info_desc"

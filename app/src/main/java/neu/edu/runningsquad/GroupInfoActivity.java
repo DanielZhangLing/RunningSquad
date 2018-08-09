@@ -69,6 +69,7 @@ public class GroupInfoActivity extends MainActivity {
                 mReference.child("squads").child(squadname).child("members").child(username).setValue(true);
                 mReference.child("squads").child(squadname).child("number").setValue(number + 1);
                 Toast.makeText(getApplicationContext(), R.string.join_squad_success, Toast.LENGTH_LONG).show();
+                tableView.removeAllViews();
                 initMemberData();
             } catch (Exception e) {
                 System.err.println("Joining squad failed: " + e.getMessage());
@@ -129,6 +130,7 @@ public class GroupInfoActivity extends MainActivity {
         ((TextView) findViewById(R.id.squad_info_city)).setText(squad.getCity());
         ((TextView) findViewById(R.id.squad_info_desc)).setText(squad.getDescription());
         ((TextView) findViewById(R.id.squad_info_prize)).setText(squad.prizes2String());
+        ((TextView) findViewById(R.id.squad_info_totalStars)).setText(Integer.toString(squad.getTotalStars()));
     }
 
     public void showMemberInfo(View row, final User user) {

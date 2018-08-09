@@ -8,7 +8,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import neu.edu.runningsquad.model.Squad;
 import neu.edu.runningsquad.util.SquadAdapter;
@@ -31,6 +36,7 @@ public class GroupSearchActivity extends MainActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private EditText searchEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,25 @@ public class GroupSearchActivity extends MainActivity {
         mRecyclerView = findViewById(R.id.squad_list);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        initGroupData();
+        searchEditText = findViewById(R.id.search_text);
+        searchEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case EditorInfo.IME_ACTION_SEND:
+                        case KeyEvent.KEYCODE_ENTER:
+                            searchSquad(findViewById(android.R.id.content));
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
+        searchSquad(findViewById(android.R.id.content));
     }
 
     public void createSquad(View view) {
@@ -89,6 +113,41 @@ public class GroupSearchActivity extends MainActivity {
         mReference.child("squads").child(squadname).child("owner").setValue(username);
     }
 
+    public void searchSquad(View view) {
+        final String searchText = searchEditText.getText().toString();
+        try {
+            mReference.child("squads").addListenerForSingleValueEvent(new ValueEventListener() {
+                List<Squad> squads = new ArrayList<>();
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        Squad squad = child.getValue(Squad.class);
+                        if (checkQualified(searchText, squad.getName()))
+                            squads.add(squad);
+                    }
+                    mAdapter = new SquadAdapter(squads);
+                    mRecyclerView.setAdapter(mAdapter);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        } catch (Exception e) {
+            System.err.println("Fetching squadData failed: " + e.getMessage());
+        }
+    }
+
+    public boolean checkQualified(String condition, String name) {
+        Pattern r = Pattern.compile(".*" + condition + ".*");
+        Matcher m = r.matcher(name);
+        if (m.find())
+            return true;
+        else
+            return false;
+    }
+
     public void jump2CreateSquad(View view) {
         findViewById(R.id.group_create_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.group_search_layout).setVisibility(View.GONE);
@@ -113,28 +172,29 @@ public class GroupSearchActivity extends MainActivity {
             super.onBackPressed();
         }
     }
-
-    public void initGroupData(){
-        try {
-            mReference.child("squads").addListenerForSingleValueEvent(new ValueEventListener() {
-                List<Squad> squads = new ArrayList<>();
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        Squad squad = child.getValue(Squad.class);
-                        squads.add(squad);
-                    }
-                    mAdapter = new SquadAdapter(squads);
-                    mRecyclerView.setAdapter(mAdapter);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-
-        } catch (Exception e) {
-            System.err.println("Fetching squadData failed: " + e.getMessage());
-        }
-    }
+//
+//    public void initGroupData() {
+//        try {
+//            mReference.child("squads").addListenerForSingleValueEvent(new ValueEventListener() {
+//                List<Squad> squads = new ArrayList<>();
+//
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+//                        Squad squad = child.getValue(Squad.class);
+//                        squads.add(squad);
+//                    }
+//                    mAdapter = new SquadAdapter(squads);
+//                    mRecyclerView.setAdapter(mAdapter);
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//                }
+//            });
+//
+//        } catch (Exception e) {
+//            System.err.println("Fetching squadData failed: " + e.getMessage());
+//        }
+//    }
 }

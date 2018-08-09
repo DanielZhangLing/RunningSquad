@@ -23,7 +23,7 @@ public class SquadAdapter extends RecyclerView.Adapter<SquadAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        private TextView nameView, cityView, memberView;
+        private TextView nameView, cityView, memberView, starView;
         private ImageView detailView;
 
         public ViewHolder(View view) {
@@ -31,6 +31,7 @@ public class SquadAdapter extends RecyclerView.Adapter<SquadAdapter.ViewHolder> 
             nameView = view.findViewById(R.id.squad_row_name);
             cityView = view.findViewById(R.id.squad_row_city);
             memberView = view.findViewById(R.id.squad_row_member);
+            starView = view.findViewById(R.id.squad_row_star);
             detailView = view.findViewById(R.id.squad_row_detail);
         }
     }
@@ -53,6 +54,7 @@ public class SquadAdapter extends RecyclerView.Adapter<SquadAdapter.ViewHolder> 
         viewHolder.nameView.setText(squad.getName());
         viewHolder.cityView.setText(squad.getCity());
         viewHolder.memberView.setText(Integer.toString(squad.getNumber()) + "/10");
+        viewHolder.starView.setText(Integer.toString(squad.getTotalStars()));
         viewHolder.detailView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
