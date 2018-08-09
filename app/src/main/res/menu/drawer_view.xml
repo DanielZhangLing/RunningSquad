@@ -21,7 +21,7 @@
         <item
             android:id="@+id/nav_ranking"
             android:icon="@drawable/baseline_format_list_numbered_black_18"
-            android:title="Running" />
+            android:title="ranking" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/baseline_settings_black_18"
