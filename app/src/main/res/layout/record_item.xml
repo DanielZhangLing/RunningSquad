@@ -9,10 +9,10 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="104dp"
-        app:layout_constraintBottom_toBottomOf="@+id/record_challenge_name"
-        app:layout_constraintEnd_toEndOf="@+id/record_challenge_name"
-        app:layout_constraintStart_toEndOf="@+id/record_challenge_name"
-        app:layout_constraintTop_toBottomOf="@+id/record_challenge_name">
+        app:layout_constraintBottom_toBottomOf="@+id/score_group_name"
+        app:layout_constraintEnd_toEndOf="@+id/score_group_name"
+        app:layout_constraintStart_toEndOf="@+id/score_group_name"
+        app:layout_constraintTop_toBottomOf="@+id/score_group_name">
 
 
         <TextView
@@ -36,7 +36,7 @@
             android:layout_marginStart="12dp"
             android:text="123"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView2"
-            app:layout_constraintStart_toEndOf="@+id/record_challenge_date" />
+            app:layout_constraintStart_toEndOf="@+id/score_group_member_num" />
 
         <TextView
             android:id="@+id/textView2"
@@ -50,7 +50,7 @@
             app:layout_constraintStart_toEndOf="@+id/record_points" />
 
         <TextView
-            android:id="@+id/record_challenge_date"
+            android:id="@+id/score_group_member_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"

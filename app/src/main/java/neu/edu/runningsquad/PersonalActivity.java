@@ -1,9 +1,11 @@
 package neu.edu.runningsquad;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,6 +36,7 @@ public class PersonalActivity extends MainActivity {
     private TextView groupNameTextView;
     private TextView groupStarsTextView;
     private TextView groupRankingTextView;
+    private ListView listView;
     private List<Record> recordList = new ArrayList<Record>();
     private RecordAdapter recordAdapter;
 
@@ -50,8 +53,7 @@ public class PersonalActivity extends MainActivity {
         groupRankingTextView = findViewById(R.id.personal_group_ranking);
         mReference = FirebaseDatabase.getInstance().getReference();
         recordAdapter = new RecordAdapter(this, recordList);
-
-        ListView listView = findViewById(R.id.personal_records_list);
+        listView = findViewById(R.id.personal_records_list);
         listView.setAdapter(recordAdapter);
         mReference.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -122,6 +124,11 @@ public class PersonalActivity extends MainActivity {
         groupNameTextView.setText(squad.getName());
         groupRankingTextView.setText("0");
         groupStarsTextView.setText(String.valueOf(squad.getPrizes()));
+    }
+
+    public void startToRun(View view){
+        Intent intent = new Intent(this, RunningActivity.class);
+        startActivity(intent);
     }
 
 }

@@ -7,15 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import neu.edu.runningsquad.R;
 import neu.edu.runningsquad.model.Record;
 
 public class RecordAdapter extends ArrayAdapter<Record> {
-    public RecordAdapter(Context context, List<Record> users) {
-        super(context, 0, users);
+    public RecordAdapter(Context context, List<Record> records) {
+        super(context, 0, records);
     }
 
     @Override
@@ -30,7 +29,7 @@ public class RecordAdapter extends ArrayAdapter<Record> {
         TextView name = convertView.findViewById(R.id.record_challenge_name);
         name.setText(record.getChallenge());
 
-        TextView date = convertView.findViewById(R.id.record_challenge_date);
+        TextView date = convertView.findViewById(R.id.score_group_member_num);
         date.setText(record.getDateTime().toString());
 
         TextView points = convertView.findViewById(R.id.record_points);
