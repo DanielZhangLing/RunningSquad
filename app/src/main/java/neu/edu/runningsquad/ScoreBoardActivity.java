@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -39,7 +40,7 @@ public class ScoreBoardActivity extends MainActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_score_board);
+        getLayoutInflater().inflate(R.layout.activity_score_board, contentFrameLayout);
         mReference = FirebaseDatabase.getInstance().getReference();
 
         cityNameText = this.findViewById(R.id.score_board_city);
@@ -51,8 +52,8 @@ public class ScoreBoardActivity extends MainActivity {
         cityNameText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId,
                                           KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_GO) {
-
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    Log.i("runningsquad", v.getText().toString());
                     searchForGroups(v.getText().toString());
                 }
                 return false;
@@ -76,7 +77,7 @@ public class ScoreBoardActivity extends MainActivity {
 
 
     void searchForGroups(String city){
-        mReference.child("squads").orderByChild("city").equalTo(city).orderByChild("score").addValueEventListener(new ValueEventListener() {
+        mReference.child("squads").orderByChild("city").equalTo(city).orderByChild("totalStars").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
