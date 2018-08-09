@@ -25,5 +25,6 @@
     <string name="join_squad">JOIN SQUAD</string>
     <string name="join_squad_warning">Maximum number of members has been reached!</string>
     <string name="join_squad_success">Welcome to our family!</string>
+    <string name="title_activity_running">Map</string>
 
 </resources>

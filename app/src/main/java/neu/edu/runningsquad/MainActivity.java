@@ -54,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(loadGroups);
                         mDrawerLayout.closeDrawers();
                         break;
+                    case R.id.nav_run:
+                        Intent loadRunning = new Intent(getApplicationContext(), RunningActivity.class);
+                        startActivity(loadRunning);
+                        mDrawerLayout.closeDrawers();
+                        break;
 
                 }
                 return false;
