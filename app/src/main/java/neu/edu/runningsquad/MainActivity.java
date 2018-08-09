@@ -54,7 +54,11 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(loadGroups);
                     mDrawerLayout.closeDrawers();
                     break;
-                    case R.id
+                case R.id.nav_ranking:
+                    Intent rankingGroups = new Intent(getApplicationContext(), ScoreBoardActivity.class);
+                    startActivity(rankingGroups);
+                    mDrawerLayout.closeDrawers();
+                    break;
 
             }
             return false;
