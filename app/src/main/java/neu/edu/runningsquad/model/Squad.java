@@ -12,6 +12,7 @@ public class Squad {
     private Map<String, Boolean> prizes;
     private String owner;
     private int number;
+    private int totalStars;
 
     public Squad() {
     }
@@ -24,6 +25,7 @@ public class Squad {
         members = new HashMap<>();
         prizes = new HashMap<>();
         number = 1;
+        totalStars = 0;
     }
 
     public String getName() {
@@ -91,5 +93,13 @@ public class Squad {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public int getTotalStars() {
+        return totalStars;
+    }
+
+    public void setTotalStars(int totalStars) {
+        this.totalStars = totalStars;
     }
 }
