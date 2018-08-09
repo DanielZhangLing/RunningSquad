@@ -3,18 +3,16 @@ package neu.edu.runningsquad;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-
-import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -39,26 +37,31 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
 
-                    case R.id.nav_squad:
-                        Intent loadSquad = new Intent(getApplicationContext(), GroupInfoActivity.class);
-                        startActivity(loadSquad);
-                        mDrawerLayout.closeDrawers();
-                        break;
-                    case R.id.nav_profile:
-                        Intent loadProfile = new Intent(getApplicationContext(), PersonalActivity.class);
-                        startActivity(loadProfile);
-                        mDrawerLayout.closeDrawers();
-                        break;
-                    case R.id.nav_groups:
-                        Intent loadGroups = new Intent(getApplicationContext(), GroupSearchActivity.class);
-                        startActivity(loadGroups);
-                        mDrawerLayout.closeDrawers();
-                        break;
-                    case R.id.nav_run:
-                        Intent loadRunning = new Intent(getApplicationContext(), RunningActivity.class);
-                        startActivity(loadRunning);
-                        mDrawerLayout.closeDrawers();
-                        break;
+                case R.id.nav_squad:
+                    Intent loadSquad = new Intent(getApplicationContext(), GroupInfoActivity.class);
+                    startActivity(loadSquad);
+                    mDrawerLayout.closeDrawers();
+                    break;
+                case R.id.nav_profile:
+                    Intent loadProfile = new Intent(getApplicationContext(), PersonalActivity.class);
+                    startActivity(loadProfile);
+                    mDrawerLayout.closeDrawers();
+                    break;
+                case R.id.nav_groups:
+                    Intent loadGroups = new Intent(getApplicationContext(), GroupSearchActivity.class);
+                    startActivity(loadGroups);
+                    mDrawerLayout.closeDrawers();
+                    break;
+                case R.id.nav_ranking:
+                    Intent rankingGroups = new Intent(getApplicationContext(), ScoreBoardActivity.class);
+                    startActivity(rankingGroups);
+                    mDrawerLayout.closeDrawers();
+                    break;
+                case R.id.nav_run:
+                    Intent loadRunning = new Intent(getApplicationContext(), RunningActivity.class);
+                    startActivity(loadRunning);
+                    mDrawerLayout.closeDrawers();
+                    break;
 
                 }
                 return false;

@@ -9,33 +9,35 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="104dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView12"
-        app:layout_constraintTop_toBottomOf="@+id/textView12">
+        app:layout_constraintBottom_toBottomOf="@+id/score_group_name"
+        app:layout_constraintTop_toBottomOf="@+id/score_group_name">
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/score_group_rank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:text="1"
+            android:textColor="@color/colorPrimary"
             android:textSize="48dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView12"
+            app:layout_constraintBottom_toBottomOf="@+id/score_group_name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+            app:layout_constraintTop_toBottomOf="@+id/score_group_name" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/score_group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:textColor="@color/md_blue_400"
             android:text="Group Name"
             android:textSize="24dp"
-            app:layout_constraintStart_toStartOf="@+id/textView5"
+            app:layout_constraintStart_toStartOf="@+id/score_group_member_num"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/score_group_member_stars"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="19dp"
@@ -43,18 +45,18 @@
             android:layout_marginStart="16dp"
             android:text="123 stars"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView5" />
+            app:layout_constraintStart_toEndOf="@+id/score_group_member_num" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/score_group_member_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="17dp"
             android:layout_marginStart="17dp"
             android:text="123 members"
-            app:layout_constraintBottom_toBottomOf="@+id/textView13"
-            app:layout_constraintStart_toEndOf="@+id/textView11"
-            app:layout_constraintTop_toTopOf="@+id/textView13" />
+            app:layout_constraintBottom_toBottomOf="@+id/score_group_member_stars"
+            app:layout_constraintStart_toEndOf="@+id/score_group_rank"
+            app:layout_constraintTop_toTopOf="@+id/score_group_member_stars" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -68,6 +70,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/score_group_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/score_group_name"
+            app:layout_constraintStart_toEndOf="@+id/score_group_name"
+            app:layout_constraintTop_toTopOf="@+id/score_group_name" />
 
     </android.support.constraint.ConstraintLayout>
 

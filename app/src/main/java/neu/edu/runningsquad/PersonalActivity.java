@@ -1,9 +1,12 @@
 package neu.edu.runningsquad;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -12,8 +15,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import neu.edu.runningsquad.model.Record;
 import neu.edu.runningsquad.model.Squad;
 import neu.edu.runningsquad.model.User;
+import neu.edu.runningsquad.util.RecordAdapter;
 import neu.edu.runningsquad.util.Sessions;
 
 public class PersonalActivity extends MainActivity {
@@ -28,6 +36,9 @@ public class PersonalActivity extends MainActivity {
     private TextView groupNameTextView;
     private TextView groupStarsTextView;
     private TextView groupRankingTextView;
+    private ListView listView;
+    private List<Record> recordList = new ArrayList<Record>();
+    private RecordAdapter recordAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +52,10 @@ public class PersonalActivity extends MainActivity {
         groupStarsTextView = findViewById(R.id.personal_group_stars);
         groupRankingTextView = findViewById(R.id.personal_group_ranking);
         mReference = FirebaseDatabase.getInstance().getReference();
-        mReference.child("users/" + username).addListenerForSingleValueEvent(new ValueEventListener() {
+        recordAdapter = new RecordAdapter(this, recordList);
+        listView = findViewById(R.id.personal_records_list);
+        listView.setAdapter(recordAdapter);
+        mReference.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -53,6 +67,24 @@ public class PersonalActivity extends MainActivity {
 
             }
         });
+
+        mReference.child("user-records").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot recordSnapshot: dataSnapshot.getChildren()) {
+                    Record record = recordSnapshot.getValue(Record.class);
+                    recordList.add(record);
+
+                }
+                recordAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     private void showUserInfo(User user) {
@@ -66,6 +98,8 @@ public class PersonalActivity extends MainActivity {
 
 
     }
+
+    
 
     public void initGroupData(String squadname) {
         try {
@@ -91,6 +125,11 @@ public class PersonalActivity extends MainActivity {
         groupNameTextView.setText(squad.getName());
         groupRankingTextView.setText("0");
         groupStarsTextView.setText(String.valueOf(squad.getTotalStars()));
+    }
+
+    public void startToRun(View view){
+        Intent intent = new Intent(this, RunningActivity.class);
+        startActivity(intent);
     }
 
 }

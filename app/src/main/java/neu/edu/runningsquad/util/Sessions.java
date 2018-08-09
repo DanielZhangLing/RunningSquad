@@ -68,6 +68,12 @@ public class Sessions {
         return preferences.getString("squadname", null);
     }
 
+    static public String getTempUsername(Context context){
+        SharedPreferences preferences =
+                context.getSharedPreferences(tempFile, Context.MODE_PRIVATE);
+        return preferences.getString("username", null);
+    }
+
     static public void clearTemp(Context context){
         SharedPreferences preferences =
                 context.getSharedPreferences(tempFile, Context.MODE_PRIVATE);
