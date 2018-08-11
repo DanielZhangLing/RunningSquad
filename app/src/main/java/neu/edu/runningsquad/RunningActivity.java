@@ -1,9 +1,12 @@
 package neu.edu.runningsquad;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -48,17 +51,19 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
     private static final int DEFAULT_ZOOM = 15;
+    private static final int LOCATION_PERMISSION = 0;
     private Location mLastKnownLocation;
     private boolean isRunning = false;
     private List<Location> locationList = new ArrayList<>();
     private float currDistance = 0;
     private Polyline route;
     private RoundCornerProgressBar bar;
-    private float trailLength = 6;
+    private float trailLength = 6000;
     private DatabaseReference mReference;
     private String username;
     private OnCompleteListener<Location> trailListener;
     private CircleButton startButton;
+    private float threshold = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,21 +96,45 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-
             mLocationPermissionGranted = true;
             mMap.setMyLocationEnabled(true);
-            Log.i("Runner", "run Location");
+            prepareLocation();
+
 
         } else {
-            // Show rationale and request permission.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION);
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] result){
+        super.onRequestPermissionsResult(requestCode, permissions, result);
+
+
+        if(requestCode == LOCATION_PERMISSION && result[0] == PackageManager.PERMISSION_GRANTED){
+            //do things as usual init map or something else when location permission is granted
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionGranted = true;
+                mMap.setMyLocationEnabled(true);
+                Log.i("Runner", "run Location");
+                prepareLocation();
+            }
+        }
+    }
+
+    private void prepareLocation(){
+        Log.i("Runner", "run Location");
         getDeviceLocation();
         route = mMap.addPolyline( new PolylineOptions()
                 .color(R.color.md_blue_400)
-                .width(2 )
+                .width(2)
                 .geodesic(true));
     }
 
@@ -116,38 +145,72 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
          */
         try {
             if (mLocationPermissionGranted) {
-                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = task.getResult();
-                            Log.i("Runner", mLastKnownLocation.toString());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+//                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+//                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Location> task) {
+//                        if (task.isSuccessful()) {
+//                            // Set the map's camera position to the current location of the device.
+//                            mLastKnownLocation = task.getResult();
+//                            Log.i("Runner", mLastKnownLocation.toString());
+//                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+//                                    new LatLng(mLastKnownLocation.getLatitude(),
+//                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+//
+//                        } else {
+//                            Log.d("Runner", "Current location is null. Using defaults.");
+//                            Log.e("Runner", "Exception: %s", task.getException());
+//                            mMap.moveCamera(CameraUpdateFactory
+//                                    .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+//                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+//                        }
+//                    }
+//                });
 
-                            if(isRunning){
-                                Log.d("Runner", "Is Running");
+
+                LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+// Define a listener that responds to location updates
+                LocationListener locationListener = new LocationListener() {
+                    public void onLocationChanged(Location location) {
+                        // Called when a new location is found by the network location provider.
+                        Log.d("Runner", "Is Running");
+                        mLastKnownLocation = location;
+                        Log.i("Runner", mLastKnownLocation.toString());
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                new LatLng(mLastKnownLocation.getLatitude(),
+                                        mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+
+                        Log.i("Runner", isRunning + "") ;
+                        if (isRunning) {
+                            if (locationList.size() == 0){
+                                locationList.add(location);
+                            }
+                            else {
                                 Location prevLocation = locationList.get(locationList.size() - 1);
-                                currDistance += prevLocation.distanceTo(mLastKnownLocation);
+                                currDistance += prevLocation.distanceTo(location);
                                 Log.d("Runner", "" + currDistance);
-                                Log.d("Runner", "" + mLastKnownLocation.toString());
-                                locationList.add(mLastKnownLocation);
+                                Log.d("Runner", "" + location.toString());
+
 
                                 refreshState();
                             }
-
-                        } else {
-                            Log.d("Runner", "Current location is null. Using defaults.");
-                            Log.e("Runner", "Exception: %s", task.getException());
-                            mMap.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
                         }
+
                     }
-                });
+
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+                    }
+
+                    public void onProviderEnabled(String provider) {
+                    }
+
+                    public void onProviderDisabled(String provider) {
+                    }
+                };
+
+// Register the listener with the Location Manager to receive location updates
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             }
         } catch(SecurityException e)  {
             Log.e("Runner", e.getMessage());
@@ -176,7 +239,7 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
         if(key == null){
             key = "1";
         }
-        Record record = new Record("6k", (int)currDistance/2, System.currentTimeMillis());
+        Record record = new Record("6k", (int) (currDistance/threshold), System.currentTimeMillis());
         mReference.child("user-records").child(username).child(key).setValue(record);
     }
 
@@ -184,6 +247,7 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
         locationList.clear();
         bar.setProgress(0);
         route.setPoints(new ArrayList<LatLng>());
+        currDistance = 0;
     }
 
     private void refreshState(){
