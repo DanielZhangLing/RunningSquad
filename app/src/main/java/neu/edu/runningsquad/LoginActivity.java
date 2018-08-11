@@ -30,6 +30,7 @@ public class LoginActivity extends MainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Sessions.clearTemp(this);
         initLogin();
     }
 

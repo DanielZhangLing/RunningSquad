@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import neu.edu.runningsquad.R;
@@ -29,8 +31,12 @@ public class RecordAdapter extends ArrayAdapter<Record> {
         TextView name = convertView.findViewById(R.id.record_challenge_name);
         name.setText(record.getChallenge());
 
+
+        Date d = new Date(record.getDateTime());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS");
+        String dateStr = sdf.format(d);
         TextView date = convertView.findViewById(R.id.score_group_member_num);
-        date.setText(record.getDateTime().toString());
+        date.setText(dateStr);
 
         TextView points = convertView.findViewById(R.id.record_points);
         points.setText(Integer.toString(record.getReceivedPrize()));

@@ -3,6 +3,7 @@ package neu.edu.runningsquad;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -60,6 +61,7 @@ public class PersonalActivity extends MainActivity {
         recordAdapter = new RecordAdapter(this, recordList);
         listView = findViewById(R.id.personal_records_list);
         listView.setAdapter(recordAdapter);
+        Log.i("Runner", "username " + username);
         mReference.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

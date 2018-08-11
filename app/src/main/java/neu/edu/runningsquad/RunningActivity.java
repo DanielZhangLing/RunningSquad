@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,11 +22,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import at.markushi.ui.CircleButton;
+import neu.edu.runningsquad.model.Record;
+import neu.edu.runningsquad.util.Sessions;
+
+import static neu.edu.runningsquad.util.Sessions.saveLoginInfo;
 
 public class RunningActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -37,6 +52,13 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
     private boolean isRunning = false;
     private List<Location> locationList = new ArrayList<>();
     private float currDistance = 0;
+    private Polyline route;
+    private RoundCornerProgressBar bar;
+    private float trailLength = 6;
+    private DatabaseReference mReference;
+    private String username;
+    private OnCompleteListener<Location> trailListener;
+    private CircleButton startButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +69,11 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        mReference = FirebaseDatabase.getInstance().getReference();
+        bar = findViewById(R.id.running_progress_bar);
+        username = Sessions.getUsername(this);
+        startButton = findViewById(R.id.start_to_run);
+        startButton.setColor(R.color.md_blue_400);
 
     }
 
@@ -69,12 +96,17 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
 
             mLocationPermissionGranted = true;
             mMap.setMyLocationEnabled(true);
+            Log.i("Runner", "run Location");
 
         } else {
             // Show rationale and request permission.
         }
 
         getDeviceLocation();
+        route = mMap.addPolyline( new PolylineOptions()
+                .color(R.color.md_blue_400)
+                .width(2 )
+                .geodesic(true));
     }
 
     private void getDeviceLocation() {
@@ -96,39 +128,16 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
                                     new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
 
-                        } else {
-                            Log.d("Runner", "Current location is null. Using defaults.");
-                            Log.e("Runner", "Exception: %s", task.getException());
-                            mMap.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                        }
-                    }
-                });
-            }
-        } catch(SecurityException e)  {
-            Log.e("Runner", e.getMessage());
-        }
-    }
+                            if(isRunning){
+                                Log.d("Runner", "Is Running");
+                                Location prevLocation = locationList.get(locationList.size() - 1);
+                                currDistance += prevLocation.distanceTo(mLastKnownLocation);
+                                Log.d("Runner", "" + currDistance);
+                                Log.d("Runner", "" + mLastKnownLocation.toString());
+                                locationList.add(mLastKnownLocation);
 
-    private void trackDeviceLocation() {
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
-        try {
-            if (mLocationPermissionGranted) {
-                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = task.getResult();
-                            Location prevLocation = locationList.get(locationList.size()-1);
-                            currDistance += prevLocation.distanceTo(mLastKnownLocation);
-                            locationList.add(mLastKnownLocation);
-
+                                refreshState();
+                            }
 
                         } else {
                             Log.d("Runner", "Current location is null. Using defaults.");
@@ -145,11 +154,46 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
-    private void startToRun(View view){
+
+
+    public void startToRun(View view){
         if (!isRunning){
-            trackDeviceLocation();
+            bar.setProgress(0);
+            isRunning = true;
+            startButton.setColor(R.color.md_red_400);
+        }
+        else{
+            saveState();
+            initialState();
+            isRunning = false;
+            startButton.setColor(R.color.md_blue_400);
         }
 
+    }
+
+    private void saveState(){
+        String key =  mReference.child("user-records").push().getKey();
+        if(key == null){
+            key = "1";
+        }
+        Record record = new Record("6k", (int)currDistance/2, System.currentTimeMillis());
+        mReference.child("user-records").child(username).child(key).setValue(record);
+    }
+
+    void initialState(){
+        locationList.clear();
+        bar.setProgress(0);
+        route.setPoints(new ArrayList<LatLng>());
+    }
+
+    private void refreshState(){
+        List<LatLng> points = new ArrayList<>();
+        for(Location l : locationList){
+            points.add(new LatLng(l.getLatitude(), l.getLongitude()));
+        }
+
+        bar.setProgress(currDistance/trailLength);
+        route.setPoints(points);
     }
 
 }

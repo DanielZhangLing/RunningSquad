@@ -5,10 +5,13 @@ import java.sql.Time;
 public class Record {
     String challenge;
     int receivedPrize;
-    Time dateTime;
+    Long dateTime;
 
+    public Record(){
 
-    public Record(String challenge, int receivedPrize, Time dateTime) {
+    }
+
+    public Record(String challenge, int receivedPrize, Long dateTime) {
         this.challenge = challenge;
         this.receivedPrize = receivedPrize;
         this.dateTime = dateTime;
@@ -30,11 +33,11 @@ public class Record {
         this.receivedPrize = receivedPrize;
     }
 
-    public Time getDateTime() {
+    public Long getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Time dateTime) {
+    public void setDateTime(Long dateTime) {
         this.dateTime = dateTime;
     }
 }
