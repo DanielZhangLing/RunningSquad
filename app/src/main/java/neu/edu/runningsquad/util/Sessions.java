@@ -1,12 +1,7 @@
 package neu.edu.runningsquad.util;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-
-import java.util.Collections;
-import java.util.Map;
 
 public class Sessions {
 
@@ -78,6 +73,15 @@ public class Sessions {
     static public void clearTemp(Context context){
         SharedPreferences preferences =
                 context.getSharedPreferences(tempFile, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();
+    }
+
+    static public void clearLogin(Context context){
+        SharedPreferences preferences =
+                context.getSharedPreferences(appName, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();

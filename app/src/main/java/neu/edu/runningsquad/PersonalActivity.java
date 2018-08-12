@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class PersonalActivity extends MainActivity {
     private TextView groupNameTextView;
     private TextView groupStarsTextView;
     private TextView groupRankingTextView;
+    private ImageView iconImageView;
     private ListView listView;
     private List<Record> recordList = new ArrayList<Record>();
     private RecordAdapter recordAdapter;
@@ -57,6 +59,7 @@ public class PersonalActivity extends MainActivity {
         groupNameTextView = findViewById(R.id.personal_group_name);
         groupStarsTextView = findViewById(R.id.personal_group_stars);
         groupRankingTextView = findViewById(R.id.personal_group_ranking);
+        iconImageView = findViewById(R.id.profile_icon);
         mReference = FirebaseDatabase.getInstance().getReference();
         recordAdapter = new RecordAdapter(this, recordList);
         listView = findViewById(R.id.personal_records_list);
@@ -96,15 +99,12 @@ public class PersonalActivity extends MainActivity {
     }
 
     private void showUserInfo(User user) {
-
         emailTextView.setText(user.getEmail());
         usernameTextView.setText(user.getUsername());
         starTextView.setText(Integer.toString(user.getStar()));
-
+        iconImageView.setImageResource(user.getImageId(this));
         String squad = user.getSquad();
         initGroupData(squad);
-
-
     }
 
 

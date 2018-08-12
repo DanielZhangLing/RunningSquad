@@ -2,9 +2,7 @@
 
 package neu.edu.runningsquad;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +27,9 @@ import java.util.regex.Pattern;
 import neu.edu.runningsquad.model.Squad;
 import neu.edu.runningsquad.util.SquadAdapter;
 
+import static neu.edu.runningsquad.util.Sessions.getUsername;
+import static neu.edu.runningsquad.util.Sessions.saveLoginInfo;
+
 public class GroupSearchActivity extends MainActivity {
 
     private String username;
@@ -47,8 +48,7 @@ public class GroupSearchActivity extends MainActivity {
 
     public void initGroupSearch() {
         mReference = FirebaseDatabase.getInstance().getReference();
-        SharedPreferences userInfo = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        username = userInfo.getString("username", "");
+        username = getUsername(this.getApplicationContext());
         mRecyclerView = findViewById(R.id.squad_list);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -92,7 +92,7 @@ public class GroupSearchActivity extends MainActivity {
                     mReference.child("squads").child(squadname).setValue(newSquad);
                     updateUser(squadname);
                     Toast.makeText(getApplicationContext(), R.string.squad_success, Toast.LENGTH_LONG).show();
-                    store2SharedPreference("userInfo", "squadname", squadname);
+                    saveLoginInfo(username, squadname,getApplicationContext());
                     jump2GroupInfo();
                 }
 

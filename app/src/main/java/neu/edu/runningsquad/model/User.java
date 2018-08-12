@@ -1,7 +1,6 @@
 package neu.edu.runningsquad.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import android.content.Context;
 
 public class User {
     private String username;
@@ -11,6 +10,7 @@ public class User {
     private String squad;
     private String role;
     private int star;
+    private String icon;
 
     public User() {
     }
@@ -22,6 +22,7 @@ public class User {
         this.city = city;
         this.star = 0;
         this.role = "member";
+        this.icon = "profile1";
     }
 
     public String getUsername() {
@@ -80,12 +81,15 @@ public class User {
         this.star = star;
     }
 
-//    public Map<String, Object> toMap() {
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("username", username);
-//        map.put("password", password);
-//        map.put("email", email);
-//        map.put("city", city);
-//        return map;
-//    }
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public int getImageId(Context context) {
+        return context.getResources().getIdentifier("drawable/" + icon, null, context.getPackageName());
+    }
 }

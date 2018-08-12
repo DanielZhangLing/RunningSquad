@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Running Squad</string>
-    <string name="acknowledgement">Photo by Jeremy Lapak on Unsplash https://howtodoinjava.com/security/java-aes-encryption-example/</string>
+    <string name="acknowledgement">Icon made by Freepik from www.flaticon.com\nPhoto by Jeremy Lapak on Unsplash https://howtodoinjava.com/security/java-aes-encryption-example/</string>
     <string name="title_activity_group_info">GroupInfoActivity</string>
     <string name="login_text">Login</string>
     <string name="register_text">Register</string>

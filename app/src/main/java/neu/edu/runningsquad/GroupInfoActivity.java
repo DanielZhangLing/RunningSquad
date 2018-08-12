@@ -1,11 +1,10 @@
 package neu.edu.runningsquad;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -126,6 +125,7 @@ public class GroupInfoActivity extends MainActivity {
     }
 
     public void showSquadInfo(Squad squad) {
+        ((ImageView) findViewById(R.id.squad_logo)).setImageResource(squad.getImageId(this));
         ((TextView) findViewById(R.id.squad_info_name)).setText(squad.getName());
         ((TextView) findViewById(R.id.squad_info_city)).setText(squad.getCity());
         ((TextView) findViewById(R.id.squad_info_desc)).setText(squad.getDescription());

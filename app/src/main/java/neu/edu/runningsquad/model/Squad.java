@@ -1,5 +1,7 @@
 package neu.edu.runningsquad.model;
 
+import android.content.Context;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ public class Squad {
     private String owner;
     private int number;
     private int totalStars;
+    private String icon;
 
     public Squad() {
     }
@@ -26,6 +29,7 @@ public class Squad {
         prizes = new HashMap<>();
         number = 1;
         totalStars = 0;
+        icon = "animal1";
     }
 
     public String getName() {
@@ -101,5 +105,17 @@ public class Squad {
 
     public void setTotalStars(int totalStars) {
         this.totalStars = totalStars;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public int getImageId(Context context) {
+        return context.getResources().getIdentifier("drawable/" + icon, null, context.getPackageName());
     }
 }

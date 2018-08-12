@@ -27,8 +27,12 @@
             android:icon="@drawable/baseline_settings_black_18"
             android:title="Settings" />
         <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/baseline_keyboard_return_black_18"
+            android:title="Log Out" />
+        <item
             android:id="@+id/nav_acknowlegement"
-            android:icon="@drawable/baseline_settings_black_18"
+            android:icon="@drawable/baseline_stars_black_18"
             android:title="Acknowledgement" />
     </group>
 </menu>

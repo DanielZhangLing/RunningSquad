@@ -42,32 +42,42 @@ public class LoginActivity extends MainActivity {
     }
 
     public void login(View view) {
+        View loginButton = findViewById(R.id.login_button);
+        View loginProgress = findViewById(R.id.login_progressBar);
+        loginButton.setVisibility(View.GONE);
+        loginProgress.setVisibility(View.VISIBLE);
         final String username = ((TextView) findViewById(R.id.username_input)).getText().toString();
         final String password = ((TextView) findViewById(R.id.password_input)).getText().toString();
-        mReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    User user = child.getValue(User.class);
-                    if (child.getKey().equals(username)) {
-                        if (AES.decrypt(user.getPassword(), KEY).equals(password)) {
-                            Toast.makeText(getApplicationContext(), R.string.login_success, Toast.LENGTH_LONG).show();
-                            saveLoginInfo(user.getUsername(), user.getPassword(), user.getSquad(), getApplicationContext());
-                            if (user.getSquad() != null && !user.getSquad().equals(""))
-                                jump2Person();
-                            else
-                                jump2GroupSearch();
-                            return;
+        try {
+            mReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        User user = child.getValue(User.class);
+                        if (child.getKey().equals(username)) {
+                            if (AES.decrypt(user.getPassword(), KEY).equals(password)) {
+                                Toast.makeText(getApplicationContext(), R.string.login_success, Toast.LENGTH_LONG).show();
+                                saveLoginInfo(user.getUsername(), user.getPassword(), user.getSquad(), getApplicationContext());
+                                if (user.getSquad() != null && !user.getSquad().equals(""))
+                                    jump2Person();
+                                else
+                                    jump2GroupSearch();
+                                return;
+                            }
                         }
                     }
+                    Toast.makeText(getApplicationContext(), R.string.login_fail, Toast.LENGTH_LONG).show();
                 }
-                Toast.makeText(getApplicationContext(), R.string.login_fail, Toast.LENGTH_LONG).show();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        } catch (Exception e) {
+            System.err.println("Login failed: " + e.getMessage());
+            loginButton.setVisibility(View.VISIBLE);
+            loginProgress.setVisibility(View.GONE);
+        }
     }
 
     public void register(View view) {
