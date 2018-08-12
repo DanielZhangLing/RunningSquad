@@ -123,19 +123,17 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
                     == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionGranted = true;
                 mMap.setMyLocationEnabled(true);
-                Log.i("Runner", "run Location");
                 prepareLocation();
             }
         }
     }
 
     private void prepareLocation(){
-        Log.i("Runner", "run Location");
-        getDeviceLocation();
         route = mMap.addPolyline( new PolylineOptions()
                 .color(R.color.md_blue_400)
-                .width(2)
+                .width(15)
                 .geodesic(true));
+        getDeviceLocation();
     }
 
     private void getDeviceLocation() {
@@ -193,6 +191,7 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
                                 Log.d("Runner", "" + location.toString());
 
 
+                                locationList.add(location);
                                 refreshState();
                             }
                         }
@@ -253,6 +252,7 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
     private void refreshState(){
         List<LatLng> points = new ArrayList<>();
         for(Location l : locationList){
+            Log.i("Runner", "location drawing");
             points.add(new LatLng(l.getLatitude(), l.getLongitude()));
         }
 
