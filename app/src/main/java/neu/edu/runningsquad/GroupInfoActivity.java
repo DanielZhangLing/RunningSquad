@@ -81,7 +81,7 @@ public class GroupInfoActivity extends MainActivity {
 
     private void initMemberData() {
         try {
-            mReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            mReference.child("users").orderByChild("star").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
