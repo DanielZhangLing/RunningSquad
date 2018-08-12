@@ -68,7 +68,7 @@ public class GroupInfoActivity extends MainActivity {
                 mReference.child("squads").child(squadname).child("members").child(username).setValue(true);
                 mReference.child("squads").child(squadname).child("number").setValue(number + 1);
                 Toast.makeText(getApplicationContext(), R.string.join_squad_success, Toast.LENGTH_LONG).show();
-                tableView.removeAllViews();
+                tableView.removeViews(2, tableView.getChildCount() - 2);
                 initMemberData();
             } catch (Exception e) {
                 System.err.println("Joining squad failed: " + e.getMessage());
@@ -81,7 +81,7 @@ public class GroupInfoActivity extends MainActivity {
 
     private void initMemberData() {
         try {
-            mReference.child("users").orderByChild("star").addListenerForSingleValueEvent(new ValueEventListener() {
+            mReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
