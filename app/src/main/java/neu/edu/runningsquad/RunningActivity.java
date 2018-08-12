@@ -1,7 +1,9 @@
 package neu.edu.runningsquad;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -40,6 +42,8 @@ import java.util.List;
 
 import at.markushi.ui.CircleButton;
 import neu.edu.runningsquad.model.Record;
+import neu.edu.runningsquad.model.Squad;
+import neu.edu.runningsquad.model.User;
 import neu.edu.runningsquad.util.Sessions;
 
 import static neu.edu.runningsquad.util.Sessions.saveLoginInfo;
@@ -63,7 +67,11 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
     private String username;
     private OnCompleteListener<Location> trailListener;
     private CircleButton startButton;
+    private CircleButton stopButton;
     private float threshold = 2000;
+    private String squadname;
+    private User currUser;
+    private Squad currSquad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +85,36 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
         mReference = FirebaseDatabase.getInstance().getReference();
         bar = findViewById(R.id.running_progress_bar);
         username = Sessions.getUsername(this);
+        squadname = Sessions.getSquadName(this);
         startButton = findViewById(R.id.start_to_run);
+        stopButton = findViewById(R.id.stop_running);
         startButton.setColor(R.color.md_blue_400);
+        stopButton.setColor(R.color.md_red_400);
+        stopButton.setVisibility(View.GONE);
+
+
+        mReference.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                currUser = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mReference.child("squads").child(squadname).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currSquad = dataSnapshot.getValue(Squad.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
     }
 
@@ -143,28 +179,6 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
          */
         try {
             if (mLocationPermissionGranted) {
-//                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-//                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Location> task) {
-//                        if (task.isSuccessful()) {
-//                            // Set the map's camera position to the current location of the device.
-//                            mLastKnownLocation = task.getResult();
-//                            Log.i("Runner", mLastKnownLocation.toString());
-//                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-//                                    new LatLng(mLastKnownLocation.getLatitude(),
-//                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-//
-//                        } else {
-//                            Log.d("Runner", "Current location is null. Using defaults.");
-//                            Log.e("Runner", "Exception: %s", task.getException());
-//                            mMap.moveCamera(CameraUpdateFactory
-//                                    .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-//                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-//                        }
-//                    }
-//                });
-
 
                 LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
@@ -221,14 +235,18 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
     public void startToRun(View view){
         if (!isRunning){
             bar.setProgress(0);
+
+            findViewById(R.id.start_running_bubble).setVisibility(View.GONE);
             isRunning = true;
-            startButton.setColor(R.color.md_red_400);
+            startButton.setVisibility(View.GONE);
+            stopButton.setVisibility(View.VISIBLE);
         }
         else{
             saveState();
             initialState();
             isRunning = false;
-            startButton.setColor(R.color.md_blue_400);
+            stopButton.setVisibility(View.GONE);
+
         }
 
     }
@@ -238,8 +256,28 @@ public class RunningActivity extends FragmentActivity implements OnMapReadyCallb
         if(key == null){
             key = "1";
         }
-        Record record = new Record("6k", (int) (currDistance/threshold), System.currentTimeMillis());
+
+        int stars = Math.min((int) (currDistance/threshold), 3);
+        currSquad.setTotalStars(currSquad.getTotalStars() + stars);
+        currUser.setStar(currUser.getStar() + (int) (currDistance/threshold));
+
+        Record record = new Record("6k", stars, System.currentTimeMillis());
         mReference.child("user-records").child(username).child(key).setValue(record);
+        mReference.child("users").child(username).child("star").setValue(currUser.getStar());
+        mReference.child("squads").child(squadname).child("totalStars").setValue(currSquad.getTotalStars());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Congradualations");
+        builder.setMessage("You have earned " + stars + " stars!!");
+        builder.setCancelable(false);
+        builder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        RunningActivity.this.finish();
+
+                    }
+                });
+        AlertDialog mDialog = builder.show();
     }
 
     void initialState(){

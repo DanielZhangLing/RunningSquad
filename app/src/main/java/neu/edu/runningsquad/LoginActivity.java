@@ -2,6 +2,7 @@ package neu.edu.runningsquad;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
@@ -21,7 +22,7 @@ import neu.edu.runningsquad.util.Sessions;
 
 import static neu.edu.runningsquad.util.Sessions.saveLoginInfo;
 
-public class LoginActivity extends MainActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private DatabaseReference mReference;
     private final String KEY = "runningsquad";
